@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+
+import 'package:switch_screenshot_transfer/model/page_indicator.dart';
+import 'package:switch_screenshot_transfer/ui/navigation_bar/navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,6 +14,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      // floatingActionButton: FloatingActionButton(onPressed: () => Get.back(),),
+      bottomNavigationBar: sNavigationBar(
+        pageIndicator: PageIndicator.homePage,
+      ),
+    );
   }
 }
