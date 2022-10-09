@@ -28,6 +28,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   get: ^4.6.5
+  image_picker: ^0.8.6
+  mobile_scanner: ^2.0.0
   flutter:
     sdk: flutter
 
