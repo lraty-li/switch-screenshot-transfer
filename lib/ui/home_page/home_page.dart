@@ -32,7 +32,7 @@ Widget _body() {
   return Column(
     children: [
       _showScanBox(logic, state),
-      _showStepIndicating(state),
+      _showStepIndicating(logic, state),
       _showImgSrc(logic)
     ],
   );
@@ -47,7 +47,7 @@ Widget _showScanBox(HomePageLogic logic, HomePageState state) {
   );
 }
 
-Widget _showStepIndicating(HomePageState state) {
+Widget _showStepIndicating(HomePageLogic logic, HomePageState state) {
   return Column(
     children: [
       Row(
@@ -56,7 +56,7 @@ Widget _showStepIndicating(HomePageState state) {
           Icon(Icons.done),
         ],
       ),
-      _wifiState(state),
+      _wifiState(logic, state),
       Row(
         children: [
           Text('2. scan the second qrCode'),
@@ -80,14 +80,15 @@ Widget _showImgSrc(HomePageLogic logic) {
   );
 }
 
-Widget _wifiState(HomePageState state) {
+Widget _wifiState(HomePageLogic logic, HomePageState state) {
   return Column(
     children: [
       Text('wifi ${state.wifiConfig.wifiName} scanned,'),
+      Text('wifi ${state.wifiConfig.wifiName} connected is ${false} switch\'s wifi,'),
       Row(
         children: [
           Text('password: ${state.wifiConfig.wifiPwd}'),
-          Icon(Icons.copy)
+          IconButton(onPressed: logic.setClipBoard, icon: Icon(Icons.copy))
         ],
       )
     ],

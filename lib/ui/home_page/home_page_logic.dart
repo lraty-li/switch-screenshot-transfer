@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -8,6 +9,10 @@ import 'package:switch_screenshot_transfer/ui/home_page/home_page_state.dart';
 class HomePageLogic extends GetxController {
   final HomePageState state = HomePageState();
 
+  connetToWifi(){
+    
+  }
+
   onQrCodeDected(Barcode barcode, MobileScannerArguments? args) {
     if (barcode.rawValue == null) {
       showErrorMsg();
@@ -15,10 +20,8 @@ class HomePageLogic extends GetxController {
     }
     switch (barcode.type) {
       case BarcodeType.wifi:
-        
         break;
       case BarcodeType.url:
-        
         break;
       default:
     }
@@ -38,13 +41,16 @@ class HomePageLogic extends GetxController {
     await _dectQrCodeFromImg(image);
   }
 
-  /// 
-  /// ** private method **
-  /// 
-  
-  _setWifiInfo(){
-    
+  setClipBoard() {
+    var wifiPassword = state.wifiConfig.wifiPwd;
+    Clipboard.setData(ClipboardData(text: wifiPassword));
   }
+
+  ///
+  /// ** private method **
+  ///
+
+  _setWifiInfo() {}
 
   _dectQrCodeFromImg(XFile? imgFile) async {
     if (imgFile == null) {
