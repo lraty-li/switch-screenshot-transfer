@@ -11,6 +11,6 @@ class RootLogic extends GetxController {
     //   ToastHelper.showToast('location service disabled, not able to get the connected wifi name ');
     // }
     
-    Get.toNamed('/home');
+    Get.offAndToNamed('/home');
   }
 }
