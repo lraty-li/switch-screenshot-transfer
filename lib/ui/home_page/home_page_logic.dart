@@ -23,8 +23,10 @@ class HomePageLogic extends GetxController {
   WifiInfoService wifiInfoService = WifiInfoService();
 
   bool autoOpenGallery = false;
-
+  bool scannerLocked = false;
   bool canOpenGallery = false;
+
+  String? barcodeCache; // used to avoid onDect triggered muti times
 
   MediaGallery? _gallery = MediaGallery();
 
@@ -32,23 +34,28 @@ class HomePageLogic extends GetxController {
   final ImagePicker picker = ImagePicker();
 
   connetToWifi() async {
-    await ToastHelper.showToast(
+    ToastHelper.showToast(
         '${AppLocalizations.of(_context)!.pls_connect_to_wifi(wifiConfig.wifiName!)}\n${AppLocalizations.of(_context)!.password(wifiConfig.wifiPwd)} ${AppLocalizations.of(_context)!.has_copied_to_clipboard}');
     autoOpenGallery = true;
-    await AppSettings.openWIFISettings();
+    await AppSettings.openWIFISettings(asAnotherTask: true);
   }
 
-  onQrCodeDected(Barcode barcode, MobileScannerArguments? args) {
+  onQrCodeDected(Barcode barcode, MobileScannerArguments? args) async {
     if (barcode.rawValue == null) {
-      showErrorMsg();
+      ToastHelper.showToast('no code');
       return;
     }
+    if (barcodeCache != null) {
+      return;
+    }
+
+    barcodeCache ??= barcode.rawValue;
+
     switch (barcode.type) {
       case BarcodeType.wifi:
         {
           _setWifiInfo(barcode);
           setClipBoard();
-          update();
           connetToWifi();
           break;
         }
@@ -56,27 +63,35 @@ class HomePageLogic extends GetxController {
         break;
       default:
     }
+    barcodeCache = null;
   }
 
   onResume() async {
     // await _setConnectedWifiInfo();
     canOpenGallery = false;
     update();
-    _gallery = await _downloadGallery();
-    update();
-    if (autoOpenGallery && _gallery != null) {
-      autoOpenGallery = false;
-      openMediaGalleryPage();
+    // when user scan while correct wifi connected, will open gallery first(resume from picking image)
+    try {
+      _gallery = await _downloadGallery();
+      if (_gallery != null) {
+        canOpenGallery = true;
+      }
+      if (autoOpenGallery && _gallery != null) {
+        autoOpenGallery = false;
+        openMediaGalleryPage();
+      }
+    } catch (e) {
+      canOpenGallery = false;
     }
+    update();
   }
 
-  setAll(BuildContext context){
+  setAll(BuildContext context) {
     _context = context;
   }
 
-  showErrorMsg() {}
-
   openMediaGalleryPage() {
+    //TODO dispose hold page to reset scanner?
     Get.toNamed('/gallery', parameters: {'gallery': jsonEncode(_gallery)});
   }
 
@@ -102,7 +117,6 @@ class HomePageLogic extends GetxController {
   Future<MediaGallery?> _downloadGallery() async {
     try {
       var gallery = await MediaGalleryService.fromHtml();
-      canOpenGallery = true;
       return gallery;
     } catch (e) {
       //connect timeout / parse data fail
@@ -117,7 +131,8 @@ class HomePageLogic extends GetxController {
       wifiConfig.wifiName = barcode.wifi!.ssid;
       wifiConfig.wifiPwd = barcode.wifi!.password;
     } catch (e) {
-      ToastHelper.showToast('read wifi conf fail');
+      ToastHelper.showToast(
+          AppLocalizations.of(_context)!.msg_read_wifi_config_fail);
     }
   }
 
