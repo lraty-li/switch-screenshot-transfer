@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:switch_screenshot_transfer/model/asset_file.dart';
 import 'package:switch_screenshot_transfer/model/media_gallery/media_gallery.dart';
 import 'package:switch_screenshot_transfer/model/media_gallery/media_gallery_service.dart';
@@ -36,7 +38,14 @@ class GalleryPageLogic extends GetxController {
     return FileType.unknown;
   }
 
-  Future<void> shareFile() async {}
+  Future<void> shareFile() async {
+    try {
+      Share.shareXFiles(
+          gallery.assetFiles.map((e) => XFile(e.localPath!)).toList());
+    } catch (e) {
+      ToastHelper.showToast('share file fail');
+    }
+  }
 
   Future<void> saveFile() async {
     // var extPicDirPath =
