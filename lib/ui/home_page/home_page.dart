@@ -48,7 +48,7 @@ Widget _body(BuildContext context) {
 Widget _showScanBox(HomePageLogic logic) {
   return Expanded(
     child: MobileScanner(
-        allowDuplicates: false,
+        allowDuplicates: true,
         controller: logic.cameraController,
         onDetect: logic.onQrCodeDected),
   );
