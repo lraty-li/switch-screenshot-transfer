@@ -9,6 +9,8 @@ class GalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var logic = Get.put(GalleryPageLogic());
+    logic.setAll(context);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -28,9 +30,16 @@ class GalleryPage extends StatelessWidget {
 }
 
 Widget _body() {
-  return GetBuilder<GalleryPageLogic>(
-    builder: (logic) =>
-        logic.isLoading ? _downloadingProgress() : _showGallery(),
+  return WillPopScope(
+    onWillPop: () async {
+      //TODO dispose hold page to reset scanner?
+      // Get.offAllNamed('/home'); 
+      return true; //won't return actually
+    },
+    child: GetBuilder<GalleryPageLogic>(
+      builder: (logic) =>
+          logic.isLoading ? _downloadingProgress() : _showGallery(),
+    ),
   );
 }
 
