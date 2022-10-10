@@ -59,19 +59,18 @@ Widget _showStepIndicating(HomePageLogic logic) {
       Row(
         children: [
           Text('1. scan the first qrCode'),
-          Icon(Icons.done),
         ],
       ),
       _wifiState(logic),
       Row(
         children: [
           Text('2. scan the second qrCode'),
-          Icon(Icons.done),
         ],
       ),
       GetBuilder<HomePageLogic>(
           builder: (logic) => ElevatedButton(
               onPressed:
+              //TODO 自动重试（检测是否连接了switch wifi的唯一方式）
                   logic.canOpenGallery ? logic.openMediaGalleryPage : null,
               child: Text('open gallery')))
     ],

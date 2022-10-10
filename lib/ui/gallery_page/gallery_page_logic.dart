@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:switch_screenshot_transfer/model/asset_file.dart';
 import 'package:switch_screenshot_transfer/model/media_gallery/media_gallery.dart';
 import 'package:switch_screenshot_transfer/model/media_gallery/media_gallery_service.dart';
+import 'package:switch_screenshot_transfer/util/toast.dart';
 
 enum FileType { image, video, unknown }
 
@@ -33,7 +38,18 @@ class GalleryPageLogic extends GetxController {
 
   Future<void> shareFile() async {}
 
-  Future<void> saveFile() async {}
+  Future<void> saveFile() async {
+    // var extPicDirPath =
+    //     await getExternalStorageDirectories(type: StorageDirectory.pictures);
+    // var localDictory = await Directory(
+    //         '${extPicDirPath!.first.path}${Platform.pathSeparator}Switch_Share')
+    //     .create(recursive: true);
+
+    for (var element in gallery.assetFiles) {
+      await GallerySaver.saveImage(element.localPath!);
+    }
+    ToastHelper.showToast('files saved to system gallery');
+  }
 
   _setProgress(int progress) {
     currentProgress = progress;
