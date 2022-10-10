@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 
 import 'package:switch_screenshot_transfer/model/page_indicator.dart';
 import 'package:switch_screenshot_transfer/ui/home_page/home_page_logic.dart';
-import 'package:switch_screenshot_transfer/ui/home_page/home_page_state.dart';
 import 'package:switch_screenshot_transfer/ui/navigation_bar/navigation_bar.dart';
+import 'package:switch_screenshot_transfer/util/life_cycle_watcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends LifecycleWatcherState<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,30 +24,37 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  
+  @override
+  void onResumed() {
+    final logic = Get.find<HomePageLogic>();
+    //todo await?
+    logic.onResume();
+  }
 }
 
 Widget _body() {
   final logic = Get.put(HomePageLogic());
-  final state = Get.find<HomePageLogic>().state;
   return Column(
     children: [
-      _showScanBox(logic, state),
-      _showStepIndicating(logic, state),
+      _showScanBox(logic),
+      _showStepIndicating(logic),
       _showImgSrc(logic)
     ],
   );
 }
 
-Widget _showScanBox(HomePageLogic logic, HomePageState state) {
+Widget _showScanBox(HomePageLogic logic) {
   return Expanded(
     child: MobileScanner(
         allowDuplicates: false,
-        controller: state.cameraController,
+        controller: logic.cameraController,
         onDetect: logic.onQrCodeDected),
   );
 }
 
-Widget _showStepIndicating(HomePageLogic logic, HomePageState state) {
+Widget _showStepIndicating(HomePageLogic logic) {
   return Column(
     children: [
       Row(
@@ -56,7 +63,7 @@ Widget _showStepIndicating(HomePageLogic logic, HomePageState state) {
           Icon(Icons.done),
         ],
       ),
-      _wifiState(logic, state),
+      _wifiState(logic),
       Row(
         children: [
           Text('2. scan the second qrCode'),
@@ -80,14 +87,23 @@ Widget _showImgSrc(HomePageLogic logic) {
   );
 }
 
-Widget _wifiState(HomePageLogic logic, HomePageState state) {
+Widget _wifiState(HomePageLogic logic) {
   return Column(
     children: [
-      Text('wifi ${state.wifiConfig.wifiName} scanned,'),
-      Text('wifi ${state.wifiConfig.wifiName} connected is ${false} switch\'s wifi,'),
+      GetBuilder<HomePageLogic>(
+        builder: ((logic) => Column(
+              children: [
+                Text(
+                    'wifi ${logic.currConnectedWifiConfig.wifiName} connected is ${false} switch\'s wifi,'),
+                Text('wifi ${logic.wifiConfig.wifiName} scanned,'),
+              ],
+            )),
+      ),
       Row(
         children: [
-          Text('password: ${state.wifiConfig.wifiPwd}'),
+          GetBuilder<HomePageLogic>(
+            builder: ((logic) => Text('password: ${logic.wifiConfig.wifiPwd}')),
+          ),
           IconButton(onPressed: logic.setClipBoard, icon: Icon(Icons.copy))
         ],
       )
