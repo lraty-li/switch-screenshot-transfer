@@ -1,0 +1,43 @@
+{
+  "scan_first_qrCode": "扫描第一个二维码",
+  "scan_second_qrCode": "扫描第二个二维码",
+  "open_gallery": "打开图库",
+  
+  "use_sys_cam" : "使用系统相机",
+  "pick_from_sys_gallery": "从系统图库选择",
+  
+  "scaned_wifi" : "扫描到 WiFi : {wifiName}",
+  "@scaned_wifi": {
+    "placeholders": {
+        "wifiName": {
+            "type": "String?"
+        }
+    }
+  },
+  "password" : "密码: {wifiPwd}",
+  "@password": {
+    "placeholders": {
+        "wifiPwd": {
+            "type": "String?"
+        }
+    }
+  },
+  "msg_read_wifi_config_fail" : "解析WiFi配置失败",
+  "pls_connect_to_wifi" : "请连接到WiFi : {wifiName}",
+  "@pls_connect_to_wifi": {
+    "placeholders": {
+        "wifiName": {
+            "type": "String"
+        }
+    }
+  },
+  "has_copied_to_clipboard" : "已复制到剪贴板",
+  
+  "files_saved" : "已保存全部文件到系统相册",
+  "share_file_fail" : "分享文件失败",
+
+  "home" : "主页",
+  "setting" : "设置",
+
+  "setting_language_follow_sys" : "跟随系统" 
+}
