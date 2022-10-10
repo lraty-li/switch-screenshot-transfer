@@ -91,16 +91,16 @@ Widget _showImgSrc(HomePageLogic logic) {
 }
 
 Widget _wifiState(HomePageLogic logic) {
-  var currConnectedWifi = logic.currConnectedWifiConfig;
+  // var currConnectedWifi = logic.currConnectedWifiConfig;
   var scanedWifi = logic.wifiConfig;
   return Column(
     children: [
       GetBuilder<HomePageLogic>(
         builder: ((logic) => Column(
               children: [
-                Text(
-                    'wifi ${currConnectedWifi.wifiName} connected is ${currConnectedWifi.isSwitchWifi() ? '' : 'not'} switch\'s wifi,'),
-                Text('wifi ${scanedWifi.wifiName} scanned,'),
+                // Text(
+                //     'wifi ${currConnectedWifi.wifiName} connected is ${currConnectedWifi.isSwitchWifi() ? '' : 'not'} switch\'s wifi,'),
+                Text('scanned wifi : ${scanedWifi.wifiName}'),
               ],
             )),
       ),

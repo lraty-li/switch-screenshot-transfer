@@ -71,7 +71,7 @@ Widget _showGallery() {
               child: VideoPlayer(_controller),
             );
           case FileType.image:
-            return Image.memory(files[index] as Uint8List);
+            return Image.file(File(files[index].localPath!));
           default:
             return Container();
         }

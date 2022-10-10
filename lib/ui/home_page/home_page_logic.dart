@@ -16,7 +16,7 @@ class HomePageLogic extends GetxController {
 
   WifiInfo wifiConfig = WifiInfo();
 
-  WifiInfo currConnectedWifiConfig = WifiInfo();
+  // WifiInfo currConnectedWifiConfig = WifiInfo();
 
   WifiInfoService wifiInfoService = WifiInfoService();
 
@@ -57,7 +57,7 @@ class HomePageLogic extends GetxController {
   }
 
   onResume() async {
-    await _setConnectedWifiInfo();
+    // await _setConnectedWifiInfo();
     canOpenGallery = false;
     update();
     _gallery = await _downloadGallery();
@@ -115,10 +115,10 @@ class HomePageLogic extends GetxController {
     }
   }
 
-  _setConnectedWifiInfo() async {
-    currConnectedWifiConfig.clear();
-    await wifiInfoService.updateFromSys(currConnectedWifiConfig);
-  }
+  // _setConnectedWifiInfo() async {
+  //   currConnectedWifiConfig.clear();
+  //   await wifiInfoService.updateFromSys(currConnectedWifiConfig);
+  // }
 
   _dectQrCodeFromImg(XFile? imgFile) async {
     if (imgFile == null) {

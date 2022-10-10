@@ -25,7 +25,7 @@ class GalleryPageLogic extends GetxController {
   FileType diffFileType(AssetFile file) {
     if (file.fileName!.endsWith('.mp4')) {
       return FileType.video;
-    } else if (file.fileName!.endsWith('.png')) {
+    } else if (file.fileName!.endsWith('.jpg')) {
       return FileType.image;
     }
     return FileType.unknown;
