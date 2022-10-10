@@ -25,7 +25,6 @@ class _HomePageState extends LifecycleWatcherState<HomePage> {
     );
   }
 
-  
   @override
   void onResumed() {
     final logic = Get.find<HomePageLogic>();
@@ -70,7 +69,11 @@ Widget _showStepIndicating(HomePageLogic logic) {
           Icon(Icons.done),
         ],
       ),
-      ElevatedButton(onPressed: null, child: Text('open gallery'))
+      GetBuilder<HomePageLogic>(
+          builder: (logic) => ElevatedButton(
+              onPressed:
+                  logic.canOpenGallery ? logic.openMediaGalleryPage : null,
+              child: Text('open gallery')))
     ],
   );
 }
@@ -88,14 +91,16 @@ Widget _showImgSrc(HomePageLogic logic) {
 }
 
 Widget _wifiState(HomePageLogic logic) {
+  var currConnectedWifi = logic.currConnectedWifiConfig;
+  var scanedWifi = logic.wifiConfig;
   return Column(
     children: [
       GetBuilder<HomePageLogic>(
         builder: ((logic) => Column(
               children: [
                 Text(
-                    'wifi ${logic.currConnectedWifiConfig.wifiName} connected is ${false} switch\'s wifi,'),
-                Text('wifi ${logic.wifiConfig.wifiName} scanned,'),
+                    'wifi ${currConnectedWifi.wifiName} connected is ${currConnectedWifi.isSwitchWifi() ? '' : 'not'} switch\'s wifi,'),
+                Text('wifi ${scanedWifi.wifiName} scanned,'),
               ],
             )),
       ),

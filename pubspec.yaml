@@ -28,6 +28,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   app_settings: ^4.1.8
+  dio: ^4.0.6
   network_info_plus: ^2.3.1
   fluttertoast: ^8.0.9
   get: ^4.6.5
