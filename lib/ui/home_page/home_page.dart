@@ -25,7 +25,6 @@ class _HomePageState extends LifecycleWatcherState<HomePage> {
     );
   }
 
-  
   @override
   void onResumed() {
     final logic = Get.find<HomePageLogic>();
@@ -60,17 +59,20 @@ Widget _showStepIndicating(HomePageLogic logic) {
       Row(
         children: [
           Text('1. scan the first qrCode'),
-          Icon(Icons.done),
         ],
       ),
       _wifiState(logic),
       Row(
         children: [
           Text('2. scan the second qrCode'),
-          Icon(Icons.done),
         ],
       ),
-      ElevatedButton(onPressed: null, child: Text('open gallery'))
+      GetBuilder<HomePageLogic>(
+          builder: (logic) => ElevatedButton(
+              onPressed:
+              //TODO 自动重试（检测是否连接了switch wifi的唯一方式）
+                  logic.canOpenGallery ? logic.openMediaGalleryPage : null,
+              child: Text('open gallery')))
     ],
   );
 }
@@ -88,14 +90,16 @@ Widget _showImgSrc(HomePageLogic logic) {
 }
 
 Widget _wifiState(HomePageLogic logic) {
+  // var currConnectedWifi = logic.currConnectedWifiConfig;
+  var scanedWifi = logic.wifiConfig;
   return Column(
     children: [
       GetBuilder<HomePageLogic>(
         builder: ((logic) => Column(
               children: [
-                Text(
-                    'wifi ${logic.currConnectedWifiConfig.wifiName} connected is ${false} switch\'s wifi,'),
-                Text('wifi ${logic.wifiConfig.wifiName} scanned,'),
+                // Text(
+                //     'wifi ${currConnectedWifi.wifiName} connected is ${currConnectedWifi.isSwitchWifi() ? '' : 'not'} switch\'s wifi,'),
+                Text('scanned wifi : ${scanedWifi.wifiName}'),
               ],
             )),
       ),
