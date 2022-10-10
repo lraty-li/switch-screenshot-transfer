@@ -1,6 +1,7 @@
 import 'dart:convert';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,6 +13,7 @@ import 'package:switch_screenshot_transfer/model/wifi_info/wifi_info_service.dar
 import 'package:switch_screenshot_transfer/util/toast.dart';
 
 class HomePageLogic extends GetxController {
+  late BuildContext _context;
   MobileScannerController cameraController = MobileScannerController();
 
   WifiInfo wifiConfig = WifiInfo();
@@ -31,7 +33,7 @@ class HomePageLogic extends GetxController {
 
   connetToWifi() async {
     await ToastHelper.showToast(
-        'pls connect to wifi ${wifiConfig.wifiName}\n password is ${wifiConfig.wifiPwd}, has copy to clip board');
+        '${AppLocalizations.of(_context)!.pls_connect_to_wifi(wifiConfig.wifiName!)}\n${AppLocalizations.of(_context)!.password(wifiConfig.wifiPwd)} ${AppLocalizations.of(_context)!.has_copied_to_clipboard}');
     autoOpenGallery = true;
     await AppSettings.openWIFISettings();
   }
@@ -66,6 +68,10 @@ class HomePageLogic extends GetxController {
       autoOpenGallery = false;
       openMediaGalleryPage();
     }
+  }
+
+  setAll(BuildContext context){
+    _context = context;
   }
 
   showErrorMsg() {}
@@ -111,7 +117,7 @@ class HomePageLogic extends GetxController {
       wifiConfig.wifiName = barcode.wifi!.ssid;
       wifiConfig.wifiPwd = barcode.wifi!.password;
     } catch (e) {
-      ToastHelper.showToast('set wifi conf fail');
+      ToastHelper.showToast('read wifi conf fail');
     }
   }
 
@@ -125,7 +131,6 @@ class HomePageLogic extends GetxController {
       return;
     }
     var controller = cameraController;
-    Barcode galleryBarCode = Barcode(rawValue: '');
-    var result = await controller.analyzeImage(imgFile.path);
+    await controller.analyzeImage(imgFile.path);
   }
 }

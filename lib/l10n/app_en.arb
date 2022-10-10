@@ -1,0 +1,43 @@
+{
+  "scan_first_qrCode": "Scan the first qrCode",
+  "scan_second_qrCode": "Scan the second qrCode",
+  "open_gallery": "Open Gallery",
+  
+  "use_sys_cam" : "Using system's camera app",
+  "pick_from_sys_gallery": "Pick from system gallery",
+  
+  "scaned_wifi" : "Scanned wifi : {wifiName}",
+  "@scaned_wifi": {
+    "placeholders": {
+        "wifiName": {
+            "type": "String?"
+        }
+    }
+  },
+  "password" : "password : {wifiPwd}",
+  "@password": {
+    "placeholders": {
+        "wifiPwd": {
+            "type": "String?"
+        }
+    }
+  },
+  "msg_read_wifi_config_fail" : "decode wifi configuration fail",
+  "pls_connect_to_wifi" : "pls connect to wifi : {wifiName}",
+  "@pls_connect_to_wifi": {
+    "placeholders": {
+        "wifiName": {
+            "type": "String"
+        }
+    }
+  },
+  "has_copied_to_clipboard" : "has copy to clip board",
+  
+  "files_saved" : "all files saved to system gallery",
+  "share_file_fail" : "sharing file failed",
+
+  "home" : "Home",
+  "setting" : "Setting",
+
+  "setting_language_follow_sys" : "follow system" 
+}
