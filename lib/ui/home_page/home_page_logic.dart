@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -59,7 +61,6 @@ class HomePageLogic extends GetxController {
     canOpenGallery = false;
     update();
     _gallery = await _downloadGallery();
-    canOpenGallery = true;
     update();
     if (autoOpenGallery && _gallery != null) {
       autoOpenGallery = false;
@@ -70,7 +71,7 @@ class HomePageLogic extends GetxController {
   showErrorMsg() {}
 
   openMediaGalleryPage() {
-//TODO
+    Get.toNamed('/gallery', parameters: {'gallery': jsonEncode(_gallery)});
   }
 
   pickImgWithCam() async {
@@ -94,7 +95,9 @@ class HomePageLogic extends GetxController {
 
   Future<MediaGallery?> _downloadGallery() async {
     try {
-      return await MediaGalleryService.fromHtml();
+      var gallery = await MediaGalleryService.fromHtml();
+      canOpenGallery = true;
+      return gallery;
     } catch (e) {
       //connect timeout / parse data fail
       canOpenGallery = false;
