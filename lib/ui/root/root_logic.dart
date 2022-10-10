@@ -6,11 +6,10 @@ class RootLogic extends GetxController {
   Future<void> checkPermission() async {
     await Permission.storage.request();
 
-    //depreacatd?
-    await Permission.locationWhenInUse.request();
-    if (!await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-      ToastHelper.showToast('location service disabled, not able to get the connected wifi name ');
-    }
+    // await Permission.locationWhenInUse.request();
+    // if (!await Permission.locationWhenInUse.serviceStatus.isEnabled) {
+    //   ToastHelper.showToast('location service disabled, not able to get the connected wifi name ');
+    // }
     
     Get.toNamed('/home');
   }
