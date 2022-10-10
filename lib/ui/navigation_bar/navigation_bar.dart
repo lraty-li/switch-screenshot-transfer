@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:switch_screenshot_transfer/model/page_indicator.dart';
 import 'package:switch_screenshot_transfer/routes/route.dart';
 
@@ -8,14 +9,14 @@ class sNavigationBar extends StatelessWidget {
   final PageIndicator pageIndicator;
   final RouteManager _route = RouteManager(); 
   
-  final _navigationBarItems = const [
+  _navigationBarItems(BuildContext context) => [
     BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: 'Home',
+      icon: const Icon(Icons.home),
+      label: AppLocalizations.of(context)!.home,
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.settings),
-      label: 'Setting',
+      icon: const Icon(Icons.settings),
+      label: AppLocalizations.of(context)!.setting,
     ),
   ];
 
@@ -30,7 +31,7 @@ class sNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      items: _navigationBarItems,
+      items: _navigationBarItems(context),
       currentIndex: _getPageIndex(pageIndicator),
       onTap: (index){
         //until ?
