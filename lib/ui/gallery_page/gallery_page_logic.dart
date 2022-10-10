@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:switch_screenshot_transfer/model/asset_file.dart';
 import 'package:switch_screenshot_transfer/model/media_gallery/media_gallery.dart';
 import 'package:switch_screenshot_transfer/model/media_gallery/media_gallery_service.dart';
@@ -11,6 +13,7 @@ import 'package:switch_screenshot_transfer/util/toast.dart';
 enum FileType { image, video, unknown }
 
 class GalleryPageLogic extends GetxController {
+  late BuildContext _context;
   MediaGallery gallery = MediaGallery();
   // List<List> imageDatas = [];
   int currentProgress = 0;
@@ -19,7 +22,7 @@ class GalleryPageLogic extends GetxController {
   @override
   void onInit() {
     var galleryMap = jsonDecode(Get.parameters['gallery']!);
-    gallery.formJson(galleryMap);
+    gallery.formJson(galleryMap ?? {});
 
     super.onInit();
     _downloadAllToLocal();
@@ -32,6 +35,10 @@ class GalleryPageLogic extends GetxController {
       return FileType.image;
     }
     return FileType.unknown;
+  }
+
+  setAll(BuildContext context) {
+    _context = context;
   }
 
   Future<void> shareFile() async {
@@ -51,9 +58,18 @@ class GalleryPageLogic extends GetxController {
     //     .create(recursive: true);
 
     for (var element in gallery.assetFiles) {
-      await GallerySaver.saveImage(element.localPath!);
+      var type = diffFileType(element);
+      switch (type) {
+        case FileType.image:
+          await GallerySaver.saveImage(element.localPath!);
+          break;
+        case FileType.video:
+          await GallerySaver.saveVideo(element.localPath!);
+          break;
+        default:
+      }
     }
-    ToastHelper.showToast('files saved to system gallery');
+    ToastHelper.showToast(AppLocalizations.of(_context)!.files_saved);
   }
 
   _setProgress(int progress) {
