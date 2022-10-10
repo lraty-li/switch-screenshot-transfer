@@ -27,9 +27,13 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  app_settings: ^4.1.8
+  network_info_plus: ^2.3.1
+  fluttertoast: ^8.0.9
   get: ^4.6.5
   image_picker: ^0.8.6
   mobile_scanner: ^2.0.0
+  permission_handler: ^10.1.0
   flutter:
     sdk: flutter
 
