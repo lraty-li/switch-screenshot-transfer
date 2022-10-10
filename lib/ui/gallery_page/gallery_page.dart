@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:switch_screenshot_transfer/ui/gallery_page/gallery_page_logic.dart';
@@ -11,7 +9,6 @@ class GalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logic = Get.put(GalleryPageLogic());
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -41,7 +38,7 @@ Widget _downloadingProgress() {
   return Center(
     child: Column(
       children: [
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         GetBuilder<GalleryPageLogic>(
             builder: (logic) => Text(
                 '${logic.currentProgress} / ${logic.gallery.assetFiles.length}'))
@@ -59,16 +56,16 @@ Widget _showGallery() {
         var type = logic.diffFileType(files[index]);
         switch (type) {
           case FileType.video:
-            var _controller =
+            var controller =
                 VideoPlayerController.file(File(files[index].localPath!))
                   ..initialize();
-            _controller.play();
-            _controller.setVolume(0);
-            _controller.setLooping(true);
+            controller.play();
+            controller.setVolume(0);
+            controller.setLooping(true);
             return AspectRatio(
               //todo bad hardcode
               aspectRatio: 16 / 9,
-              child: VideoPlayer(_controller),
+              child: VideoPlayer(controller),
             );
           case FileType.image:
             return Image.file(File(files[index].localPath!));

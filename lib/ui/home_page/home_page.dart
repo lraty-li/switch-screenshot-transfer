@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:switch_screenshot_transfer/model/page_indicator.dart';
 import 'package:switch_screenshot_transfer/ui/home_page/home_page_logic.dart';
 import 'package:switch_screenshot_transfer/ui/navigation_bar/navigation_bar.dart';
@@ -18,7 +18,7 @@ class _HomePageState extends LifecycleWatcherState<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _body(),
+      body: _body(context),
       bottomNavigationBar: sNavigationBar(
         pageIndicator: PageIndicator.homePage,
       ),
@@ -33,12 +33,13 @@ class _HomePageState extends LifecycleWatcherState<HomePage> {
   }
 }
 
-Widget _body() {
+Widget _body(BuildContext context) {
   final logic = Get.put(HomePageLogic());
+  logic.setAll(context);
   return Column(
     children: [
       _showScanBox(logic),
-      _showStepIndicating(logic),
+      _showStepIndicating(context, logic),
       _showImgSrc(logic)
     ],
   );
@@ -53,26 +54,28 @@ Widget _showScanBox(HomePageLogic logic) {
   );
 }
 
-Widget _showStepIndicating(HomePageLogic logic) {
+Widget _showStepIndicating(BuildContext context, HomePageLogic logic) {
   return Column(
     children: [
-      Row(
-        children: [
-          Text('1. scan the first qrCode'),
-        ],
-      ),
-      _wifiState(logic),
-      Row(
-        children: [
-          Text('2. scan the second qrCode'),
-        ],
-      ),
+      // Row(
+      //   children: [
+      //     Text(AppLocalizations.of(context)!.scan_first_qrCode),
+      //   ],
+      // ),
+      _wifiState(context, logic),
+      // Row(
+      //   children: [
+      //     Text(AppLocalizations.of(context)!.scan_second_qrCode),
+      //   ],
+      // ),
       GetBuilder<HomePageLogic>(
           builder: (logic) => ElevatedButton(
               onPressed:
-              //TODO 自动重试（检测是否连接了switch wifi的唯一方式）
+                  //TODO 自动重试（检测是否连接了switch wifi的唯一方式）
                   logic.canOpenGallery ? logic.openMediaGalleryPage : null,
-              child: Text('open gallery')))
+              child: Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: Text(AppLocalizations.of(context)!.open_gallery))))
     ],
   );
 }
@@ -80,16 +83,17 @@ Widget _showStepIndicating(HomePageLogic logic) {
 Widget _showImgSrc(HomePageLogic logic) {
   return Row(
     children: [
-      ElevatedButton(
-          onPressed: logic.pickImgWithCam, child: Text('using system camera')),
-      ElevatedButton(
+      IconButton(
+          onPressed: logic.pickImgWithCam,
+          icon: const Icon(Icons.photo_camera)),
+      IconButton(
           onPressed: logic.pickImgFromGallery,
-          child: Text('choose from gallery'))
+          icon: const Icon(Icons.photo_library))
     ],
   );
 }
 
-Widget _wifiState(HomePageLogic logic) {
+Widget _wifiState(BuildContext context, HomePageLogic logic) {
   // var currConnectedWifi = logic.currConnectedWifiConfig;
   var scanedWifi = logic.wifiConfig;
   return Column(
@@ -99,16 +103,20 @@ Widget _wifiState(HomePageLogic logic) {
               children: [
                 // Text(
                 //     'wifi ${currConnectedWifi.wifiName} connected is ${currConnectedWifi.isSwitchWifi() ? '' : 'not'} switch\'s wifi,'),
-                Text('scanned wifi : ${scanedWifi.wifiName}'),
+                Text(AppLocalizations.of(context)!
+                    .scaned_wifi(scanedWifi.wifiName)),
               ],
             )),
       ),
       Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           GetBuilder<HomePageLogic>(
-            builder: ((logic) => Text('password: ${logic.wifiConfig.wifiPwd}')),
+            builder: ((logic) => Text(
+                AppLocalizations.of(context)!.password(scanedWifi.wifiPwd))),
           ),
-          IconButton(onPressed: logic.setClipBoard, icon: Icon(Icons.copy))
+          IconButton(
+              onPressed: logic.setClipBoard, icon: const Icon(Icons.copy))
         ],
       )
     ],
